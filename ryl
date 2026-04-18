@@ -1,0 +1,166 @@
+-- [[ SCRIPT RYL HUB V1 ]] --
+local Player = game.Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local Camera = workspace.CurrentCamera
+
+-- [[ 1. Intro Animation ]] --
+local function RunIntro()
+    local IntroGui = Instance.new("ScreenGui", CoreGui)
+    IntroGui.DisplayOrder = 999999
+    local F = Instance.new("Frame", IntroGui)
+    F.Size = UDim2.new(1, 0, 1, 0)
+    F.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    local L = Instance.new("TextLabel", F)
+    L.Size = UDim2.new(1, 0, 1, 0)
+    L.BackgroundTransparency = 1
+    L.Text = "tima RYL Mere R7"
+    L.TextColor3 = Color3.fromRGB(255, 0, 0)
+    L.TextSize = 50
+    L.Font = Enum.Font.SpecialElite
+    local S = Instance.new("Sound", workspace)
+    S.SoundId = "rbxassetid://5835881423" 
+    S:Play()
+    task.wait(2.5)
+    IntroGui:Destroy()
+end
+task.spawn(RunIntro)
+
+-- [[ 2. Main GUI ]] --
+local MainGui = Instance.new("ScreenGui", CoreGui)
+MainGui.ResetOnSpawn = false
+local MainFrame = Instance.new("Frame", MainGui)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+MainFrame.Position = UDim2.new(0.2, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 200, 0, 310) -- من پیچەک درێژتر کر بۆ دوگمەیا نوی
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Text = "RYL HUB V1"
+Title.Size = UDim2.new(1, 0, 0.12, 0)
+Title.TextColor3 = Color3.fromRGB(255, 0, 0)
+Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Title.TextSize = 20
+
+local TargetInput = Instance.new("TextBox", MainFrame)
+TargetInput.PlaceholderText = "Target (2 Letters)"
+TargetInput.Size = UDim2.new(0.9, 0, 0.1, 0)
+TargetInput.Position = UDim2.new(0.05, 0, 0.15, 0)
+TargetInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TargetInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local SpeedInput = Instance.new("TextBox", MainFrame)
+SpeedInput.PlaceholderText = "Speed"
+SpeedInput.Text = "15"
+SpeedInput.Size = UDim2.new(0.9, 0, 0.1, 0)
+SpeedInput.Position = UDim2.new(0.05, 0, 0.28, 0)
+SpeedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+SpeedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local AntiBangBtn = Instance.new("TextButton", MainFrame)
+AntiBangBtn.Text = "Anti-Bang (دابەزین)"
+AntiBangBtn.Position = UDim2.new(0.05, 0, 0.41, 0)
+AntiBangBtn.Size = UDim2.new(0.9, 0, 0.1, 0)
+AntiBangBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+AntiBangBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local FrontBtn = Instance.new("TextButton", MainFrame)
+FrontBtn.Text = "Front (پێش)"
+FrontBtn.Position = UDim2.new(0.05, 0, 0.54, 0)
+FrontBtn.Size = UDim2.new(0.9, 0, 0.1, 0)
+FrontBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
+
+local BackBtn = Instance.new("TextButton", MainFrame)
+BackBtn.Text = "Back (پشت)"
+BackBtn.Position = UDim2.new(0.05, 0, 0.67, 0)
+BackBtn.Size = UDim2.new(0.9, 0, 0.1, 0)
+BackBtn.BackgroundColor3 = Color3.fromRGB(130, 0, 255)
+
+local StopBtn = Instance.new("TextButton", MainFrame)
+StopBtn.Text = "STOP"
+StopBtn.Position = UDim2.new(0.05, 0, 0.85, 0)
+StopBtn.Size = UDim2.new(0.9, 0, 0.1, 0)
+StopBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+
+local ToggleBtn = Instance.new("TextButton", MainGui)
+ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
+ToggleBtn.Position = UDim2.new(0, 5, 0.4, 0)
+ToggleBtn.Text = "RYL"
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+
+-- [[ 3. Core Logic ]] --
+local RunService = game:GetService("RunService")
+local TargetPlayer = nil
+local Mode = ""
+local IsActive = false
+local Angle = 0
+
+local function GetPlayer(S)
+    for _, v in pairs(game.Players:GetPlayers()) do
+        if string.sub(v.Name:lower(),1,#S) == S:lower() or string.sub(v.DisplayName:lower(),1,#S) == S:lower() then return v end
+    end
+end
+
+-- فەنکشنا Anti-Bang
+AntiBangBtn.MouseButton1Click:Connect(function()
+    local hrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        workspace.FallenPartsDestroyHeight = -1000
+        local lastCFrame = hrp.CFrame
+        hrp.CFrame = CFrame.new(Vector3.new(0, -500, 0))
+        task.wait(0.7)
+        hrp.CFrame = lastCFrame
+        workspace.FallenPartsDestroyHeight = -500
+    end
+end)
+
+FrontBtn.MouseButton1Click:Connect(function()
+    TargetPlayer = GetPlayer(TargetInput.Text)
+    if TargetPlayer then 
+        Mode = "Front" IsActive = true 
+        Player.Character.Humanoid.Sit = true
+        Camera.CameraSubject = nil 
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("مص", "All")
+    end
+end)
+
+BackBtn.MouseButton1Click:Connect(function()
+    TargetPlayer = GetPlayer(TargetInput.Text)
+    if TargetPlayer then 
+        Mode = "Back" IsActive = true 
+        Player.Character.Humanoid.Sit = true
+        Camera.CameraSubject = nil
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("مص", "All")
+    end
+end)
+
+StopBtn.MouseButton1Click:Connect(function()
+    IsActive = false
+    Mode = ""
+    Camera.CameraSubject = Player.Character.Humanoid
+    if Player.Character and Player.Character:FindFirstChild("Humanoid") then Player.Character.Humanoid.Sit = false end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if IsActive and TargetPlayer and TargetPlayer.Character and Player.Character then
+        local MyRoot = Player.Character:FindFirstChild("HumanoidRootPart")
+        local TheirRoot = TargetPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if MyRoot and TheirRoot then
+            local Speed = tonumber(SpeedInput.Text) or 15
+            Angle = Angle + (Speed / 10)
+            local MoveOffset = math.sin(Angle) * 0.7
+            
+            if Mode == "Front" then
+                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 1.1, -1.2) * CFrame.Angles(0, math.pi, 0) * CFrame.new(0, 0, MoveOffset)
+            elseif Mode == "Back" then
+                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, -0.2, 1.2) * CFrame.new(0, 0, MoveOffset)
+            end
+            MyRoot.Velocity = Vector3.new(0, 0, 0)
+        end
+    end
+end)
+
