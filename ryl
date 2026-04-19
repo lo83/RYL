@@ -33,6 +33,49 @@ MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.BorderSizePixel = 2
 MainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+-- [[ RYL HUB V1 - CLEAN EDITION ]] --
+-- Credits: RYL MERE R7 | Height: 0.9
+
+local Player = game.Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local RunService = game:GetService("RunService")
+
+-- [ 1. LOAD EMOTES IN BACKGROUND ] --
+-- سکرێپتێ ئیمۆتان لۆد دبیت بەس بێی دوگمە د ناڤ مێنیویێ دا
+task.spawn(function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Emotes.lua"))()
+    end)
+end)
+
+-- [ 2. HACKER NOTIFICATION ] --
+local function ShowHackerNotify()
+    local NotifyGui = Instance.new("ScreenGui", CoreGui)
+    local TextLabel = Instance.new("TextLabel", NotifyGui)
+    TextLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    TextLabel.Position = UDim2.new(0, 0, 0.4, 0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    TextLabel.TextSize = 40
+    TextLabel.Font = Enum.Font.Code
+    TextLabel.Text = ">> RYL HUB V1 LOADED <<"
+    task.delay(3, function() NotifyGui:Destroy() end)
+end
+ShowHackerNotify()
+
+-- [ 3. GUI SETUP ] --
+if CoreGui:FindFirstChild("RYL_HUB_V1") then CoreGui.RYL_HUB_V1:Destroy() end
+local MainGui = Instance.new("ScreenGui", CoreGui)
+MainGui.Name = "RYL_HUB_V1"
+
+local MainFrame = Instance.new("Frame", MainGui)
+MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MainFrame.Size = UDim2.new(0, 220, 0, 320) -- من قەبارە بچویک کر چونکی دوگمە کێم بوون
+MainFrame.Position = UDim2.new(0.3, 0, 0.25, 0)
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
 
 local Title = Instance.new("TextLabel", MainFrame)
 Title.Text = "RYL HUB V1"
@@ -42,7 +85,7 @@ Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Title.Font = Enum.Font.GothamBold
 
 local TargetInput = Instance.new("TextBox", MainFrame)
-TargetInput.PlaceholderText = "2 Letters of Name..."
+TargetInput.PlaceholderText = "Target Name..."
 TargetInput.Size = UDim2.new(0.9, 0, 0.1, 0)
 TargetInput.Position = UDim2.new(0.05, 0, 0.12, 0)
 TargetInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -58,7 +101,7 @@ SpeedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 local function CreateBtn(text, pos, color)
     local btn = Instance.new("TextButton", MainFrame)
     btn.Text = text
-    btn.Size = UDim2.new(0.9, 0, 0.1, 0)
+    btn.Size = UDim2.new(0.9, 0, 0.12, 0)
     btn.Position = pos
     btn.BackgroundColor3 = color
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -67,12 +110,13 @@ local function CreateBtn(text, pos, color)
     return btn
 end
 
+-- Buttons (دوگمەیا ئیمۆتان لێرە هاتە ڕەشکرن)
 local AntiBangBtn = CreateBtn("ANTI-BANG", UDim2.new(0.05, 0, 0.38, 0), Color3.fromRGB(60, 60, 60))
-local FrontBtn = CreateBtn("MODE 1 (FRONT)", UDim2.new(0.05, 0, 0.50, 0), Color3.fromRGB(150, 0, 0))
-local BackBtn = CreateBtn("MODE 2 (BACK)", UDim2.new(0.05, 0, 0.62, 0), Color3.fromRGB(100, 0, 0))
-local StopBtn = CreateBtn("STOP EXECUTION", UDim2.new(0.05, 0, 0.76, 0), Color3.fromRGB(40, 40, 40))
-StopBtn.Size = UDim2.new(0.9, 0, 0.14, 0)
+local FrontBtn = CreateBtn("MODE 1 (FRONT)", UDim2.new(0.05, 0, 0.52, 0), Color3.fromRGB(150, 0, 0))
+local BackBtn = CreateBtn("MODE 2 (BACK)", UDim2.new(0.05, 0, 0.66, 0), Color3.fromRGB(100, 0, 0))
+local StopBtn = CreateBtn("STOP EXECUTION", UDim2.new(0.05, 0, 0.82, 0), Color3.fromRGB(40, 40, 40))
 
+-- Toggle Button (RYL)
 local ToggleBtn = Instance.new("TextButton", MainGui)
 ToggleBtn.Size = UDim2.new(0, 60, 0, 35)
 ToggleBtn.Position = UDim2.new(0, 10, 0.4, 0)
@@ -82,7 +126,7 @@ ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleBtn.Draggable = true
 ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
 
--- [ 3. CORE LOGIC ] --
+-- [ 4. CORE LOGIC ] --
 local TargetPlayer = nil
 local Mode = ""
 local IsActive = false
@@ -133,7 +177,6 @@ RunService.RenderStepped:Connect(function()
             local MoveOffset = math.sin(Angle) * 1.5
             
             if Mode == "Front" then
-                -- Height set to 0.9 as requested
                 MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 0.9, -1.1) * CFrame.Angles(0, math.pi, 0) * CFrame.new(0, 0, MoveOffset)
             elseif Mode == "Back" then
                 MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 0.9, 1.1) * CFrame.new(0, 0, MoveOffset)
