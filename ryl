@@ -1,55 +1,60 @@
--- [[ RYL HUB V1 ]] --
--- Credits: Ryl Mere R7
--- Combined with 740 Emotes
+-- [[ RYL HUB V1 - HEIGHT 0.9 ]] --
+-- Credits: RYL MERE R7
 
 local Player = game.Players.LocalPlayer
 local CoreGui = game:GetService("CoreGui")
+local RunService = game:GetService("RunService")
 
--- [[ 1. UNLOCK ALL EMOTES (740) ]] --
-task.spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Emotes.lua"))()
-end)
+-- [ 1. HACKER NOTIFICATION ] --
+local function ShowHackerNotify()
+    local NotifyGui = Instance.new("ScreenGui", CoreGui)
+    local TextLabel = Instance.new("TextLabel", NotifyGui)
+    TextLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    TextLabel.Position = UDim2.new(0, 0, 0.4, 0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    TextLabel.TextSize = 50
+    TextLabel.Font = Enum.Font.Code
+    TextLabel.Text = ">> RYL MERE R7 LOADED <<"
+    task.delay(2, function() NotifyGui:Destroy() end)
+end
+ShowHackerNotify()
 
--- [[ 2. RYL HUB V1 GUI ]] --
+-- [ 2. GUI SETUP ] --
+if CoreGui:FindFirstChild("RYL_HUB_V1") then CoreGui.RYL_HUB_V1:Destroy() end
 local MainGui = Instance.new("ScreenGui", CoreGui)
 MainGui.Name = "RYL_HUB_V1"
-MainGui.ResetOnSpawn = false
 
 local MainFrame = Instance.new("Frame", MainGui)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.BorderSizePixel = 2
-MainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
-MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
-MainFrame.Size = UDim2.new(0, 200, 0, 320)
+MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MainFrame.Size = UDim2.new(0, 220, 0, 360)
+MainFrame.Position = UDim2.new(0.3, 0, 0.25, 0)
 MainFrame.Active = true
 MainFrame.Draggable = true
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
 
 local Title = Instance.new("TextLabel", MainFrame)
 Title.Text = "RYL HUB V1"
-Title.Size = UDim2.new(1, 0, 0.12, 0)
+Title.Size = UDim2.new(1, 0, 0.1, 0)
 Title.TextColor3 = Color3.fromRGB(255, 0, 0)
-Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Title.TextSize = 18
+Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Title.Font = Enum.Font.GothamBold
 
--- [ Target Input ]
 local TargetInput = Instance.new("TextBox", MainFrame)
-TargetInput.PlaceholderText = "Target Name"
+TargetInput.PlaceholderText = "2 Letters of Name..."
 TargetInput.Size = UDim2.new(0.9, 0, 0.1, 0)
-TargetInput.Position = UDim2.new(0.05, 0, 0.15, 0)
-TargetInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TargetInput.Position = UDim2.new(0.05, 0, 0.12, 0)
+TargetInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 TargetInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- [ Speed Input ]
 local SpeedInput = Instance.new("TextBox", MainFrame)
-SpeedInput.PlaceholderText = "Speed (15)"
-SpeedInput.Text = "15"
+SpeedInput.Text = "25"
 SpeedInput.Size = UDim2.new(0.9, 0, 0.1, 0)
-SpeedInput.Position = UDim2.new(0.05, 0, 0.28, 0)
-SpeedInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+SpeedInput.Position = UDim2.new(0.05, 0, 0.24, 0)
+SpeedInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 SpeedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- [ Buttons ]
 local function CreateBtn(text, pos, color)
     local btn = Instance.new("TextButton", MainFrame)
     btn.Text = text
@@ -57,127 +62,83 @@ local function CreateBtn(text, pos, color)
     btn.Position = pos
     btn.BackgroundColor3 = color
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.GothamBold
+    btn.Font = Enum.Font.Code
+    btn.BorderSizePixel = 0
     return btn
 end
 
-local AntiBangBtn = CreateBtn("Anti-Bang", UDim2.new(0.05, 0, 0.41, 0), Color3.fromRGB(60, 60, 60))
-local FrontBtn = CreateBtn("Front (پێش)", UDim2.new(0.05, 0, 0.54, 0), Color3.fromRGB(0, 102, 204))
-local BackBtn = CreateBtn("Back (پشت)", UDim2.new(0.05, 0, 0.67, 0), Color3.fromRGB(102, 0, 204))
-local StopBtn = CreateBtn("STOP", UDim2.new(0.05, 0, 0.85, 0), Color3.fromRGB(204, 0, 0))
+local AntiBangBtn = CreateBtn("ANTI-BANG", UDim2.new(0.05, 0, 0.38, 0), Color3.fromRGB(60, 60, 60))
+local FrontBtn = CreateBtn("MODE 1 (FRONT)", UDim2.new(0.05, 0, 0.50, 0), Color3.fromRGB(150, 0, 0))
+local BackBtn = CreateBtn("MODE 2 (BACK)", UDim2.new(0.05, 0, 0.62, 0), Color3.fromRGB(100, 0, 0))
+local StopBtn = CreateBtn("STOP EXECUTION", UDim2.new(0.05, 0, 0.76, 0), Color3.fromRGB(40, 40, 40))
+StopBtn.Size = UDim2.new(0.9, 0, 0.14, 0)
 
--- [ Toggle Button ]
 local ToggleBtn = Instance.new("TextButton", MainGui)
-ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
+ToggleBtn.Size = UDim2.new(0, 60, 0, 35)
 ToggleBtn.Position = UDim2.new(0, 10, 0.4, 0)
 ToggleBtn.Text = "RYL"
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.Draggable = true
 ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
 
--- [[ 3. CORE LOGIC ]] --
-local RunService = game:GetService("RunService")
+-- [ 3. CORE LOGIC ] --
 local TargetPlayer = nil
 local Mode = ""
 local IsActive = false
 local Angle = 0
 
 local function GetPlayer(S)
+    if S == "" then return nil end
     for _, v in pairs(game.Players:GetPlayers()) do
         if v.Name:lower():sub(1,#S) == S:lower() or v.DisplayName:lower():sub(1,#S) == S:lower() then return v end
     end
 end
 
-AntiBangBtn.MouseButton1Click:Connect(function()
-    local hrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        workspace.FallenPartsDestroyHeight = -1000
-        local lastCF = hrp.CFrame
-        hrp.CFrame = CFrame.new(Vector3.new(0, -500, 0))
-        task.wait(0.7)
-        hrp.CFrame = lastCF
-        workspace.FallenPartsDestroyHeight = -500
-    end
-end)
-
 FrontBtn.MouseButton1Click:Connect(function()
     TargetPlayer = GetPlayer(TargetInput.Text)
-    if TargetPlayer then 
-        Mode = "Front" IsActive = true 
-        Player.Character.Humanoid.Sit = true
-        workspace.CurrentCamera.CameraSubject = nil
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("مص", "All")
-    end
+    if TargetPlayer then Mode = "Front" IsActive = true Player.Character.Humanoid.Sit = true end
 end)
 
 BackBtn.MouseButton1Click:Connect(function()
     TargetPlayer = GetPlayer(TargetInput.Text)
-    if TargetPlayer then 
-        Mode = "Back" IsActive = true 
-        Player.Character.Humanoid.Sit = true
-        workspace.CurrentCamera.CameraSubject = nil
-    end
+    if TargetPlayer then Mode = "Back" IsActive = true Player.Character.Humanoid.Sit = true end
 end)
 
-StopBtn.MouseButton1Click:Connect(function()
-    IsActive = false
-    Mode = ""
-    workspace.CurrentCamera.CameraSubject = Player.Character:FindFirstChild("Humanoid")
+StopBtn.MouseButton1Click:Connect(function() 
+    IsActive = false 
+    Mode = "" 
     if Player.Character:FindFirstChild("Humanoid") then Player.Character.Humanoid.Sit = false end
+    if Player.Character:FindFirstChild("HumanoidRootPart") then Player.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0) end
+end)
+
+AntiBangBtn.MouseButton1Click:Connect(function()
+    local hrp = Player.Character.HumanoidRootPart
+    workspace.FallenPartsDestroyHeight = -1000
+    local lastCF = hrp.CFrame
+    hrp.CFrame = CFrame.new(0, -500, 0)
+    task.wait(0.7)
+    hrp.CFrame = lastCF
+    workspace.FallenPartsDestroyHeight = -500
 end)
 
 RunService.RenderStepped:Connect(function()
     if IsActive and TargetPlayer and TargetPlayer.Character and Player.Character then
         local MyRoot = Player.Character:FindFirstChild("HumanoidRootPart")
         local TheirRoot = TargetPlayer.Character:FindFirstChild("HumanoidRootPart")
+        
         if MyRoot and TheirRoot then
-            local Speed = tonumber(SpeedInput.Text) or 15
+            local Speed = tonumber(SpeedInput.Text) or 25
             Angle = Angle + (Speed / 10)
-            local MoveOffset = math.sin(Angle) * 0.7
+            local MoveOffset = math.sin(Angle) * 1.5
+            
             if Mode == "Front" then
-                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 1.1, -1.2) * CFrame.Angles(0, math.pi, 0) * CFrame.new(0, 0, MoveOffset)
+                -- Height set to 0.9 as requested
+                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 0.9, -1.1) * CFrame.Angles(0, math.pi, 0) * CFrame.new(0, 0, MoveOffset)
             elseif Mode == "Back" then
-                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, -0.2, 1.2) * CFrame.new(0, 0, MoveOffset)
+                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 0.9, 1.1) * CFrame.new(0, 0, MoveOffset)
             end
-            MyRoot.Velocity = Vector3.new(0, 0, 0)
-        end
-    end
-end)
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("مص", "All")
-    end
-end)
-
-BackBtn.MouseButton1Click:Connect(function()
-    TargetPlayer = GetPlayer(TargetInput.Text)
-    if TargetPlayer then 
-        Mode = "Back" IsActive = true 
-        Player.Character.Humanoid.Sit = true
-        workspace.CurrentCamera.CameraSubject = nil
-    end
-end)
-
-StopBtn.MouseButton1Click:Connect(function()
-    IsActive = false
-    Mode = ""
-    workspace.CurrentCamera.CameraSubject = Player.Character:FindFirstChild("Humanoid")
-    if Player.Character:FindFirstChild("Humanoid") then Player.Character.Humanoid.Sit = false end
-end)
-
-RunService.RenderStepped:Connect(function()
-    if IsActive and TargetPlayer and TargetPlayer.Character and Player.Character then
-        local MyRoot = Player.Character:FindFirstChild("HumanoidRootPart")
-        local TheirRoot = TargetPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if MyRoot and TheirRoot then
-            local Speed = tonumber(SpeedInput.Text) or 15
-            Angle = Angle + (Speed / 10)
-            local MoveOffset = math.sin(Angle) * 0.7
-            if Mode == "Front" then
-                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, 1.1, -1.2) * CFrame.Angles(0, math.pi, 0) * CFrame.new(0, 0, MoveOffset)
-            elseif Mode == "Back" then
-                MyRoot.CFrame = TheirRoot.CFrame * CFrame.new(0, -0.2, 1.2) * CFrame.new(0, 0, MoveOffset)
-            end
-            MyRoot.Velocity = Vector3.new(0, 0, 0)
+            MyRoot.Velocity = Vector3.new(0,0,0)
         end
     end
 end)
